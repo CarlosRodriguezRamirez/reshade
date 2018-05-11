@@ -188,7 +188,9 @@ namespace reshade
 		std::vector<uniform> _uniforms;
 		std::vector<technique> _techniques;
 		static unsigned int s_vr_system_ref_count;
-
+		float _vr_Offset = 0.06f;
+		float _vr_Scale [2] = { 1.0, 1.0 };
+		uint32_t _vr_ScreenSize[2] = { 0, 0 };
 	private:
 		void init_vr_system();
 		void shutdown_vr_system();
@@ -264,5 +266,6 @@ namespace reshade
 		size_t _uniform_count = 0;
 		size_t _technique_count = 0;
 		float _vr_angular_velocity_multiplier[2] = { 10, 10 };
+		
 	};
 }

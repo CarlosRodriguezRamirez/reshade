@@ -7,8 +7,9 @@
 #include "d3d9_device.hpp"
 #include "d3d9_swapchain.hpp"
 
-extern void dump_present_parameters(const D3DPRESENT_PARAMETERS &pp);
+extern bool use_nvidia_3d;
 
+extern void dump_present_parameters(const D3DPRESENT_PARAMETERS &pp);
 // IDirect3DDevice9
 HRESULT STDMETHODCALLTYPE Direct3DDevice9::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -253,14 +254,15 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice9::Reset(D3DPRESENT_PARAMETERS *pPresent
 
 	return hr;
 }
+
 HRESULT STDMETHODCALLTYPE Direct3DDevice9::Present(const RECT *pSourceRect, const RECT *pDestRect, HWND hDestWindowOverride, const RGNDATA *pDirtyRegion)
 {
 	assert(_implicit_swapchain != nullptr);
 	assert(_implicit_swapchain->_runtime != nullptr);
 
 	_implicit_swapchain->_runtime->on_present();
-
-	return _orig->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
+	return _orig->Present (pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);	
+	//return D3D_OK;
 }
 HRESULT STDMETHODCALLTYPE Direct3DDevice9::GetBackBuffer(UINT iSwapChain, UINT iBackBuffer, D3DBACKBUFFER_TYPE Type, IDirect3DSurface9 **ppBackBuffer)
 {
@@ -441,6 +443,7 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice9::GetDepthStencilSurface(IDirect3DSurfa
 
 	return D3D_OK;
 }
+
 HRESULT STDMETHODCALLTYPE Direct3DDevice9::BeginScene()
 {
 	return _orig->BeginScene();

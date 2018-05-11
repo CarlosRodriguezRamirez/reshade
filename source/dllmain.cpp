@@ -10,8 +10,9 @@
 #include "hook_manager.hpp"
 #include "version.h"
 #include <Windows.h>
-
+#include "captureVR.h"
 HMODULE g_module_handle = nullptr;
+
 
 #if defined(APPLICATION)
 
@@ -149,12 +150,13 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID)
 			hooks::register_module(system_path / "ws2_32.dll");
 
 			LOG(INFO) << "Initialized.";
+
 			break;
 		}
 		case DLL_PROCESS_DETACH:
 		{
 			LOG(INFO) << "Exiting ...";
-
+			VRAdapter::Shutdown ();
 			input::uninstall();
 			hooks::uninstall();
 

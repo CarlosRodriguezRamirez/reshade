@@ -21,6 +21,7 @@
 #include <imgui_internal.h>
 #include <openvr.h>
 #include <Windows.h>
+#include "captureVR.h"
 
 namespace reshade
 {
@@ -96,12 +97,18 @@ namespace reshade
 			_imgui_font_atlas->AddFontDefault();
 
 		load_configuration();
+		
+		VRAdapter::SetIPD (_vr_Offset);
+		VRAdapter::SetScale (_vr_Scale[0], _vr_Scale[1]);
+		VRAdapter::SetTargetSize (_vr_ScreenSize[0], _vr_ScreenSize[1]);
+		VRAdapter::Init ();
 
-		init_vr_system();
+		//init_vr_system();
 	}
 	runtime::~runtime()
 	{
-		shutdown_vr_system();
+		//VRAdapter::Shutdown ();
+		//shutdown_vr_system();
 
 		ImGui::SetCurrentContext(_imgui_context);
 
@@ -799,6 +806,10 @@ namespace reshade
 
 		config.get("VR", "Enabled", _is_vr_enabled);
 		config.get("VR", "AngularVelocityMultiplier", _vr_angular_velocity_multiplier);
+		config.get ("VR", "DefaultSize", _vr_ScreenSize);		
+		config.get ("VR", "Offset", _vr_Offset);
+		config.get ("VR", "Scale", _vr_Scale);
+		
 
 		config.get("STYLE", "Alpha", _imgui_context->Style.Alpha);
 		config.get("STYLE", "ColBackground", _imgui_col_background);
@@ -906,6 +917,9 @@ namespace reshade
 
 		config.set("VR", "Enabled", _is_vr_enabled);
 		config.set("VR", "AngularVelocityMultiplier", _vr_angular_velocity_multiplier);
+		config.set ("VR", "DefaultSize", _vr_ScreenSize);
+		config.set ("VR", "Offset", _vr_Offset);
+		config.set ("VR", "Scale", _vr_Scale);
 
 		config.set("STYLE", "Alpha", _imgui_context->Style.Alpha);
 		config.set("STYLE", "ColBackground", _imgui_col_background);

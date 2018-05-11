@@ -10,7 +10,7 @@
 #include "hook_manager.hpp"
 #include "version.h"
 #include <Windows.h>
-
+#include "CaptureVr\captureVR.h"
 HMODULE g_module_handle = nullptr;
 
 #if defined(RESHADE_TEST_APPLICATION)
@@ -185,11 +185,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID)
 
 			const auto system_path = filesystem::get_special_folder_path(filesystem::special_folder::system);
 			hooks::register_module(system_path / "d3d9.dll");
-			hooks::register_module(system_path / "d3d10.dll");
-			hooks::register_module(system_path / "d3d10_1.dll");
-			hooks::register_module(system_path / "d3d11.dll");
-			hooks::register_module(system_path / "dxgi.dll");
-			hooks::register_module(system_path / "opengl32.dll");
 			hooks::register_module(system_path / "user32.dll");
 			hooks::register_module(system_path / "ws2_32.dll");
 
@@ -199,7 +194,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID)
 		case DLL_PROCESS_DETACH:
 		{
 			LOG(INFO) << "Exiting ...";
-
+			VRAdapter::Shutdown ();
 			input::uninstall();
 			hooks::uninstall();
 

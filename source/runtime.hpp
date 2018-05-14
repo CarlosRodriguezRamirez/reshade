@@ -187,6 +187,9 @@ namespace reshade
 		std::vector<texture> _textures;
 		std::vector<uniform> _uniforms;
 		std::vector<technique> _techniques;
+		float _vr_Offset = 0.06f;
+		float _vr_Scale [2] = { 1.0, 1.0 };
+		uint32_t _vr_ScreenSize[2] = { 0, 0 };
 
 	private:
 		void reload();

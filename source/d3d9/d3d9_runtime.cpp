@@ -10,11 +10,13 @@
 #include "input.hpp"
 #include <imgui.h>
 #include <algorithm>
+#include "CaptureVr\captureVR.h"
 
 const auto D3DFMT_INTZ = static_cast<D3DFORMAT>(MAKEFOURCC('I', 'N', 'T', 'Z'));
 const auto D3DFMT_DF16 = static_cast<D3DFORMAT>(MAKEFOURCC('D', 'F', '1', '6'));
 const auto D3DFMT_DF24 = static_cast<D3DFORMAT>(MAKEFOURCC('D', 'F', '2', '4'));
 
+int even =0;
 namespace reshade::d3d9
 {
 	d3d9_runtime::d3d9_runtime(IDirect3DDevice9 *device, IDirect3DSwapChain9 *swapchain) :
@@ -238,8 +240,33 @@ namespace reshade::d3d9
 		}
 
 		_depth_source_table.clear();
+
+		m_capture.m_surface.reset ();
+		m_capture.m_width = 0;
+		m_capture.m_height = 0;
 	}
-	void d3d9_runtime::on_present()
+	
+	void d3d9_runtime::on_present ()
+	{
+		if (!is_initialized ())
+		{
+			return;
+		}
+
+		// Resolve back buffer
+		if (_backbuffer_resolved != _backbuffer)
+		{
+			_device->StretchRect (_backbuffer.get (), nullptr, _backbuffer_resolved.get (), nullptr, D3DTEXF_NONE);
+	}
+
+		//VRAdapter::SetDefault (_vr_ScreenSize);
+		VRAdapter::SetCaptureSize (_width, _height);
+ 		if (++even%2)
+ 			capture_Vr ();
+	}
+
+#if 0 // Default on_present function
+	void d3d9_runtime::on_present ()
 	{
 		if (!is_initialized())
 		{
@@ -325,6 +352,8 @@ namespace reshade::d3d9
 		// End post processing
 		_device->EndScene();
 	}
+#endif
+
 	void d3d9_runtime::on_draw_call(D3DPRIMITIVETYPE type, UINT vertices)
 	{
 		switch (type)
@@ -404,8 +433,77 @@ namespace reshade::d3d9
 			depthstencil->AddRef();
 		}
 	}
+	void d3d9_runtime::capture_Vr ()
+	{
+		if (_backbuffer_format != D3DFMT_X8R8G8B8 &&
+			_backbuffer_format != D3DFMT_X8B8G8R8 &&
+			_backbuffer_format != D3DFMT_A8R8G8B8 &&
+			_backbuffer_format != D3DFMT_A8B8G8R8)
+		{
+			LOG (WARNING) << "Screenshots are not supported for back buffer format " << _backbuffer_format << ".";
+			return;
+		}
 
-	void d3d9_runtime::capture_frame(uint8_t *buffer) const
+		HRESULT hr;
+		// Ensure capture surface is initialized and the right size.
+		if (m_capture.m_width != _width || m_capture.m_height != _height || m_capture.m_format != _backbuffer_format)
+		{
+			// Create a pool on system memory that we will use to capture the current frame.
+			hr = _device->CreateOffscreenPlainSurface (_width, _height, _backbuffer_format, D3DPOOL_SYSTEMMEM, &m_capture.m_surface, nullptr);
+			m_capture.m_width = _width;
+			m_capture.m_height = _height;
+			m_capture.m_format = _backbuffer_format;
+			if (FAILED (hr))
+				return;
+
+			m_capture.m_buffer.resize (_width * _height * 4);
+
+		}		
+
+		// Copy _backbuffer_resolved onto the capture surface
+		hr = _device->GetRenderTargetData (_backbuffer_resolved.get (), m_capture.m_surface.get ());
+
+		if (FAILED (hr))
+			return;
+
+		//////////////////////////////////////////////////////////////////////////
+		// To Copy the capture surface to a mapped CPU memory
+		D3DLOCKED_RECT mapped_rect;
+		hr = m_capture.m_surface->LockRect (&mapped_rect, nullptr, D3DLOCK_READONLY);
+
+		if (FAILED (hr))
+			return;
+		m_capture.m_surface->UnlockRect ();
+		auto mapped_data = static_cast<uint8_t*>(mapped_rect.pBits);
+		VRAdapter::AcquireContext (mapped_data);
+
+#if 0	
+		const UINT pitch = _width * 4;
+		uint8_t* buffer = m_capture.m_buffer.data ();
+		//stbi_set_flip_vertically_on_load (true);
+		//for (UINT y = 0; y < _height; y++)
+		for (UINT y = _height; y >=1 ; --y)
+		{
+			std::memcpy (buffer, mapped_data, std::min (pitch, static_cast<UINT>(mapped_rect.Pitch)));
+
+			for (UINT x = 0; x < pitch; x += 4)
+			{
+				buffer[x + 3] = 0xFF;
+
+				if (_backbuffer_format == D3DFMT_A8R8G8B8 || _backbuffer_format == D3DFMT_X8R8G8B8)
+				{
+					std::swap (buffer[x + 0], buffer[x + 2]);
+				}
+			}
+
+			buffer += pitch;
+			mapped_data += mapped_rect.Pitch;
+		}
+#endif
+		//m_capture.m_surface->UnlockRect ();
+	}
+
+	void d3d9_runtime::capture_frame (uint8_t *buffer) const
 	{
 		if (_backbuffer_format != D3DFMT_X8R8G8B8 &&
 			_backbuffer_format != D3DFMT_X8B8G8R8 &&

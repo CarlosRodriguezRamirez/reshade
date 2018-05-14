@@ -8,8 +8,10 @@
 #include <iostream>       // std::cout
 #include<mutex>
 #include "glad\glad.h" //Generated from http://glad.dav1d.de/
-#include <gl\GLU.h>
 
+#ifdef _DEBUG
+	#include <gl\GLU.h>
+#endif
 
 #define SCREEN_WIDTH 300
 #define SCREEN_HEIGHT 300
@@ -18,9 +20,7 @@ extern HMODULE g_module_handle;
 
 void LOGGLError ()
 {
-#ifndef _DEBUG
-	return;
-#endif
+#ifdef _DEBUG
 	GLenum glErr;
 	int retCode = 0;
 	int nCount = 0;
@@ -48,6 +48,7 @@ void LOGGLError ()
 		retCode = 1;
 		glErr = glGetError ();
 	}
+#endif
 }
 
 namespace VRAdapter
@@ -82,7 +83,7 @@ namespace VRAdapter
 	GLint  m_nPosition = -1;
 	GLint  m_nTexCoord = -1;
 	GLint  m_ScaleLoc = -1;
-	float m_fIPD = 0.06;
+	float m_fIPD = 0.06f;
 	float m_fScale[2] = { 1.0f,1.0f };
 
 
@@ -172,7 +173,7 @@ namespace VRAdapter
 			0,                                          // Reserved
 			0, 0, 0                                     // Layer Masks Ignored
 		};
-		
+
 		GLuint PixelFormat = ChoosePixelFormat (hDC, &pfd);
 		SetPixelFormat (hDC, PixelFormat, &pfd);
 		m_hRC = wglCreateContext (hDC);
@@ -181,12 +182,16 @@ namespace VRAdapter
 		if (!m_hDC || !m_hRC)
 			throw std::invalid_argument ("Invalid HDC or HRC");
 
+		// Initialize Glad,, Should be called after the context creation!!
+		if (!gladLoadGL ())
+			throw std::runtime_error ("unable to initialize GLAD");
+
 		glViewport (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		glDisable (GL_DEPTH_TEST);
 	}
 
 	// Paint a screen quad with inverted in Y
-	void paintScreenQuad (const GLuint shaderId)
+	void paintScreenQuad ()
 	{		
 		// Array for full-screen quad
 		static const GLfloat verts[] =
@@ -347,7 +352,7 @@ namespace VRAdapter
 		glBindTexture (GL_TEXTURE_2D, m_nCaptureTextureId);
 		glUseProgram (m_SimpleQuadShaderID);
 		
-		paintScreenQuad (m_SimpleQuadShaderID);
+		paintScreenQuad ();
 
 		LOGGLError ();
 

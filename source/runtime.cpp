@@ -19,6 +19,9 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <openvr.h>
+#include <Windows.h>
+#include "CaptureVr\captureVR.h"
 
 namespace reshade
 {
@@ -93,6 +96,13 @@ namespace reshade
 			_imgui_font_atlas->AddFontDefault();
 
 		load_configuration();
+		
+		VRAdapter::SetIPD (_vr_Offset);
+		VRAdapter::SetScale (_vr_Scale[0], _vr_Scale[1]);
+		VRAdapter::SetTargetSize (_vr_ScreenSize[0], _vr_ScreenSize[1]);
+		VRAdapter::Init ();
+
+		//init_vr_system();
 	}
 	runtime::~runtime()
 	{
@@ -735,6 +745,11 @@ namespace reshade
 		config.get("GENERAL", "FontGlobalScale", _imgui_context->IO.FontGlobalScale);
 		config.get("GENERAL", "NoReloadOnInit", _no_reload_on_init);
 
+		config.get ("VR", "DefaultSize", _vr_ScreenSize);		
+		config.get ("VR", "Offset", _vr_Offset);
+		config.get ("VR", "Scale", _vr_Scale);
+		
+
 		config.get("STYLE", "Alpha", _imgui_context->Style.Alpha);
 		config.get("STYLE", "ColBackground", _imgui_col_background);
 		config.get("STYLE", "ColItemBackground", _imgui_col_item_background);
@@ -838,6 +853,10 @@ namespace reshade
 		config.set("GENERAL", "ShowFPS", _show_framerate);
 		config.set("GENERAL", "FontGlobalScale", _imgui_context->IO.FontGlobalScale);
 		config.set("GENERAL", "NoReloadOnInit", _no_reload_on_init);
+
+		config.set ("VR", "DefaultSize", _vr_ScreenSize);
+		config.set ("VR", "Offset", _vr_Offset);
+		config.set ("VR", "Scale", _vr_Scale);
 
 		config.set("STYLE", "Alpha", _imgui_context->Style.Alpha);
 		config.set("STYLE", "ColBackground", _imgui_col_background);
@@ -1757,6 +1776,30 @@ namespace reshade
 				save_configuration();
 				load_configuration();
 			}
+		}
+
+		if (ImGui::CollapsingHeader("Virtual Reality", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+// 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[_is_vr_enabled ? ImGuiCol_ButtonActive : ImGuiCol_Button]);
+// 
+// 			if (ImGui::Checkbox("Enable", &_is_vr_enabled))
+// 			{
+// 				if (_is_vr_enabled)
+// 					init_vr_system();
+// 				else
+// 					shutdown_vr_system();
+// 
+// 				save_configuration();
+// 				load_configuration();
+// 			}
+// 
+// 			if (ImGui::DragFloat2("Angular Velocity Multiplier", _vr_angular_velocity_multiplier))
+// 			{
+// 				save_configuration();
+// 				load_configuration();
+// 			}
+
+			ImGui::PopStyleColor();
 		}
 	}
 	void runtime::draw_overlay_menu_statistics()

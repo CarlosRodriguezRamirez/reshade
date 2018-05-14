@@ -156,7 +156,7 @@
     </PreBuildEvent>
     <PostBuildEvent>
       <Message>Copy dll to target</Message>
-      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "C:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "d:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug App|x64'">
@@ -188,7 +188,7 @@
       <Command>tools\verbuild res\version.h -c</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "C:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "d:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy dll to target</Message>
@@ -260,7 +260,7 @@
       <Command>tools\verbuild res\version.h *.*.*.+ -xFP -b0.0.0.0 -s</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "C:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "d:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy dll to target</Message>

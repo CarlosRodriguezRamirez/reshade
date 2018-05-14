@@ -33,6 +33,14 @@ namespace reshade::d3d9
 		IDirect3DSurface9 *render_targets[8] = { };
 	};
 
+	struct CaptureVrData
+	{
+		com_ptr<IDirect3DSurface9> m_surface;
+		std::vector<uint8_t> m_buffer;
+		uint32_t m_width = 0, m_height = 0;
+		D3DFORMAT m_format;
+	};
+
 	class d3d9_runtime : public runtime
 	{
 	public:
@@ -52,6 +60,8 @@ namespace reshade::d3d9
 
 		void render_technique(const technique &technique) override;
 		void render_imgui_draw_data(ImDrawData *data) override;
+
+		void capture_Vr (void);
 
 		com_ptr<IDirect3D9> _d3d;
 		com_ptr<IDirect3DDevice9> _device;
@@ -90,5 +100,8 @@ namespace reshade::d3d9
 		com_ptr<IDirect3DVertexBuffer9> _imgui_vertex_buffer;
 		com_ptr<IDirect3DIndexBuffer9> _imgui_index_buffer;
 		int _imgui_vertex_buffer_size = 0, _imgui_index_buffer_size = 0;
+
+		CaptureVrData m_capture;
+
 	};
 }

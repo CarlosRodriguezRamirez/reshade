@@ -257,9 +257,16 @@ namespace reshade::d3d9
 		if (_backbuffer_resolved != _backbuffer)
 		{
 			_device->StretchRect (_backbuffer.get (), nullptr, _backbuffer_resolved.get (), nullptr, D3DTEXF_NONE);
-	}
+		}
+		
+		bool bUp = _input->is_key_pressed (VK_UP, true, true, false); //VK_UP
+		bool bDown = _input->is_key_pressed (VK_DOWN, true, true, false);// VK_DOWN
 
-		//VRAdapter::SetDefault (_vr_ScreenSize);
+		if (bUp)
+			VRAdapter::SetIPD (_vr_Offset -=0.001f);
+		else if (bDown)
+			VRAdapter::SetIPD (_vr_Offset += 0.001f);
+		
 		VRAdapter::SetCaptureSize (_width, _height);
  		if (++even%2)
  			capture_Vr ();

@@ -411,6 +411,7 @@ namespace VRAdapter
 	void renderDO ()
 	{
 		glDrawArrays (GL_TRIANGLES, 0, 6);
+		glUniform1f (m_OffsetLoc, m_fIPD);
 	}
 
 	void renderEnd ()

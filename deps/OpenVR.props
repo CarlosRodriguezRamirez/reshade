@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <OpenVr_Dir>D:\GitHub\OpenVr</OpenVr_Dir>
+    <OpenVr_Dir>$(SolutionDir)deps\OpenVr</OpenVr_Dir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

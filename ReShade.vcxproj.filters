@@ -99,6 +99,9 @@
     <ClCompile Include="source\CaptureVr\VRAdapter.cpp">
       <Filter>CaptureVr</Filter>
     </ClCompile>
+    <ClCompile Include="source\CaptureVr\VRLeap.cpp">
+      <Filter>CaptureVr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\hook.hpp">
@@ -168,6 +171,9 @@
       <Filter>glad</Filter>
     </ClInclude>
     <ClInclude Include="source\CaptureVr\captureVR.h">
+      <Filter>CaptureVr</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CaptureVr\VRLeap.h">
       <Filter>CaptureVr</Filter>
     </ClInclude>
   </ItemGroup>

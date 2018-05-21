@@ -8,6 +8,7 @@
 #include <iostream>       // std::cout
 #include<mutex>
 #include "glad\glad.h" //Generated from http://glad.dav1d.de/
+#include "VRLeap.h"
 
 #ifdef _DEBUG
 	#include <gl\GLU.h>
@@ -536,6 +537,7 @@ namespace VRAdapter
 	void mainLoop ()
 	{
 		startVr ();
+		VRLeap::Initialize ();
 
 		adquire ();
 		renderBegin ();
@@ -544,12 +546,14 @@ namespace VRAdapter
 		{
 			if (m_Dirty)
 			{
+				VRLeap::UpdateFrame ();
 				adquire ();
 				//renderStereoTargets ();
 				renderDO ();
 				submitFrames (m_frameBuffer.m_LeftTextureId, m_frameBuffer.m_RightTextureId);				
 				waitVr ();
 			}
+			
 		}
 
 		renderEnd ();

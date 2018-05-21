@@ -68,6 +68,30 @@
     <Import Project="deps\ImGui.props" />
     <Import Project="deps\OpenVR.props" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="deps\LeapMotionPropertySheet.props" />
+    <Import Project="deps\glm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug App|Win32'">
+    <Import Project="deps\LeapMotionPropertySheet.props" />
+    <Import Project="deps\glm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug App|x64'">
+    <Import Project="deps\LeapMotionPropertySheet.props" />
+    <Import Project="deps\glm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="deps\LeapMotionPropertySheet.props" />
+    <Import Project="deps\glm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="deps\LeapMotionPropertySheet.props" />
+    <Import Project="deps\glm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="deps\LeapMotionPropertySheet.props" />
+    <Import Project="deps\glm.props" />
+  </ImportGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -283,6 +307,7 @@
   <ItemGroup>
     <ClCompile Include="source\CaptureVr\captureVR.cpp" />
     <ClCompile Include="source\CaptureVr\VRAdapter.cpp" />
+    <ClCompile Include="source\CaptureVr\VRLeap.cpp" />
     <ClCompile Include="source\CaptureVr\VRWindows.cpp" />
     <ClCompile Include="source\d3d9\d3d9.cpp" />
     <ClCompile Include="source\d3d9\d3d9_device.cpp" />
@@ -308,6 +333,7 @@
     <ClInclude Include="res\resource.h" />
     <ClInclude Include="res\version.h" />
     <ClInclude Include="source\CaptureVr\captureVR.h" />
+    <ClInclude Include="source\CaptureVr\VRLeap.h" />
     <ClInclude Include="source\com_ptr.hpp" />
     <ClInclude Include="source\d3d9\d3d9.hpp" />
     <ClInclude Include="source\d3d9\d3d9_device.hpp" />

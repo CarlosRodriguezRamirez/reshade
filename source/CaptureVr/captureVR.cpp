@@ -18,7 +18,7 @@
 #define SCREEN_HEIGHT 300
 
 extern HMODULE g_module_handle;
-
+extern std::string gShadersPath;
 void LOGGLError ()
 {
 #ifdef _DEBUG
@@ -96,6 +96,29 @@ namespace VRAdapter
 	};
 	FramebufferDesc m_frameBuffer;
 
+	uint64_t GetFileLength (std::ifstream& file)
+	{
+		if (!file.good ()) return 0;
+
+		std::ifstream::pos_type pos = file.tellg ();
+		file.seekg (0, std::ios::end);
+		std::ifstream::pos_type len = file.tellg ();
+		file.seekg (std::ios::beg);
+		return (uint64_t)len;
+	}
+
+	std::string LoadFile (const char* fileName)
+	{
+		std::string str;
+		std::ifstream file (fileName);
+		file.seekg (0, std::ios::end);
+		str.reserve (file.tellg ());
+		file.seekg (0, std::ios::beg);
+		str.assign ((std::istreambuf_iterator<char> (file)),
+			std::istreambuf_iterator<char> ());
+
+		return str;
+	}
 
 	GLuint CompileGLShader (const char *pchShaderName, const char *pchVertexShader, const char *pchFragmentShader)
 	{
@@ -149,6 +172,17 @@ namespace VRAdapter
 		glUseProgram (0);
 
 		return unProgramID;
+	}
+
+	GLuint LoadShader (const char *pchShaderName, const char *pchVertexShader, const char *pchFragmentShader)
+	{
+		std::string vertex = LoadFile (std::string(gShadersPath + pchVertexShader).c_str());
+		if (vertex.empty ())
+			return 0;
+		std::string fragment = LoadFile (std::string (gShadersPath + pchFragmentShader).c_str ());
+		if (fragment.empty ())
+			return 0;
+		return CompileGLShader (pchShaderName, vertex.c_str (), fragment.c_str ());
 	}
 
 	void initGL (HDC hDC)

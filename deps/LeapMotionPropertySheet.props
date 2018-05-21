@@ -4,8 +4,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_PropertySheetDisplayName>LeapMotion</_PropertySheetDisplayName>
-    <IncludePath>E:\Opt\LeapSDK\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Opt\LeapSDK\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(LEAP_SDK)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LEAP_SDK)\lib\x64\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

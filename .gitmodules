@@ -13,3 +13,10 @@
 [submodule "glm"]
 	path = deps/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "fx-gltf"]
+	path = deps/fx-gltf
+	url = https://github.com/jessey-git/fx-gltf.git
+[submodule "json"]
+	path = deps/json
+	url = https://github.com/nlohmann/json.git
+

@@ -69,28 +69,46 @@
     <Import Project="deps\OpenVR.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="SystemPath.props" />
     <Import Project="deps\LeapMotionPropertySheet.props" />
     <Import Project="deps\glm.props" />
+    <Import Project="deps\fx_gltf.props" />
+    <Import Project="deps\json.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug App|Win32'">
     <Import Project="deps\LeapMotionPropertySheet.props" />
     <Import Project="deps\glm.props" />
+    <Import Project="SystemPath.props" />
+    <Import Project="deps\fx_gltf.props" />
+    <Import Project="deps\json.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug App|x64'">
     <Import Project="deps\LeapMotionPropertySheet.props" />
     <Import Project="deps\glm.props" />
+    <Import Project="SystemPath.props" />
+    <Import Project="deps\fx_gltf.props" />
+    <Import Project="deps\json.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="deps\LeapMotionPropertySheet.props" />
     <Import Project="deps\glm.props" />
+    <Import Project="SystemPath.props" />
+    <Import Project="deps\fx_gltf.props" />
+    <Import Project="deps\json.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="deps\LeapMotionPropertySheet.props" />
+    <Import Project="SystemPath.props" />
     <Import Project="deps\glm.props" />
+    <Import Project="deps\LeapMotionPropertySheet.props" />
+    <Import Project="deps\fx_gltf.props" />
+    <Import Project="deps\json.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="deps\LeapMotionPropertySheet.props" />
     <Import Project="deps\glm.props" />
+    <Import Project="SystemPath.props" />
+    <Import Project="deps\fx_gltf.props" />
+    <Import Project="deps\json.props" />
   </ImportGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -180,7 +198,7 @@
     </PreBuildEvent>
     <PostBuildEvent>
       <Message>Copy dll to target</Message>
-      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "c:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "$(BMS_DIR)\d3d9.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug App|x64'">
@@ -212,7 +230,7 @@
       <Command>tools\verbuild res\version.h -c</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "c:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "$(BMS_DIR)\d3d9.dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy dll to target</Message>
@@ -284,7 +302,7 @@
       <Command>tools\verbuild res\version.h *.*.*.+ -xFP -b0.0.0.0 -s</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "c:\Falcon BMS 4.33 U1\Bin\x64\d3d9.dll"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "$(BMS_DIR)\d3d9.dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy dll to target</Message>

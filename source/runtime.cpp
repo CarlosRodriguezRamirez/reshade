@@ -23,8 +23,10 @@
 #include <Windows.h>
 #include "CaptureVr\captureVR.h"
 
+std::string gShadersPath;
 namespace reshade
 {
+	
 	filesystem::path runtime::s_reshade_dll_path, runtime::s_target_executable_path;
 
 	runtime::runtime(uint32_t renderer) :
@@ -49,6 +51,8 @@ namespace reshade
 		_menu_key_data[0] = 0x71; // VK_F2
 		_menu_key_data[2] = true; // VK_SHIFT
 		_screenshot_key_data[0] = 0x2C; // VK_SNAPSHOT
+		filesystem::path resPath = s_reshade_dll_path.parent_path ();
+		gShadersPath = resPath.string ();
 
 		_configuration_path = s_reshade_dll_path;
 		_configuration_path.replace_extension(".ini");
